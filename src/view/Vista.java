@@ -14,15 +14,21 @@ public class Vista {
         String retiro1 = wallet1.extSaldo(50000); // Llamar el método extSaldo para extraer dinero del objeto wallet1
         System.out.println(retiro1);
         // System.out.println(wallet1.getSaldo()); // esta linea se crea con sysout
-        String limite1 = wallet1.breakLimite(false);
+        String limite1 = wallet1.breakLimite();
         System.out.println(limite1);
 
+        String meta2 = wallet2.definirMeta(700000);
+        System.out.println(meta2);
         String saldo2 = wallet2.putSaldo(600000);
         System.out.println(saldo2);
-        // String saldo21 = wallet2.extSaldo(650000);
-        // System.out.println(saldo21);
-        // System.out.println( wallet2.getSaldo());
-        String limite2 = wallet2.breakLimite(true);
+        String saldo3 = wallet2.putSaldo(200000);
+        System.out.println(saldo3);
+        String saldo21 = wallet2.extSaldo(650000);
+        System.out.println(saldo21);
+        System.out.println( wallet2.getSaldo());
+        String limite2 = wallet2.breakLimite();
         System.out.println(limite2);
+
+
     }
 }

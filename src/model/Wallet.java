@@ -13,12 +13,14 @@ public class Wallet { //vamos a manejar esta clase como una alcancía o cuenta d
      */
     private int saldo; // recordar que los atributos son privados
     private boolean tieneLimite; // servirá para saber si mi billetera tiene un límite
+    private double meta;
 
     // Contructor: sirve para crear los objeto sy permite funcionar de acuerdo a como la clase dice que debe funcionar
     public Wallet(boolean limite) { // usar ctor para crear esta línea de código, dentro de paréntesis van los parámetros a los cuales hay que definirle el tipo de dato
         super();
         saldo = 0; // recien creada la billetera el saldo sera "cero"
         tieneLimite = limite;
+        meta = 0;
     }
 
     // Leer el saldo con una función o método, que por lo general son públicos
@@ -26,15 +28,42 @@ public class Wallet { //vamos a manejar esta clase como una alcancía o cuenta d
         return saldo;
     } 
 
-    // Agregar saldo con un método
+    // verificar meta
+    public boolean verificarMeta(){
+        if (saldo >= meta && meta > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    // Agregar saldo (consignar)
     public String putSaldo(int valor){
         if (saldo + valor > LIMITE_BILLETERA && tieneLimite) { // Evaluamos si la suma del saldo y el nuevo valor y existe un limite de saldo entonces no se puede almacenar el nuevo valor
             return "No puede superar el límite";
         }
         saldo += valor; // Si no se cumple la condición anterior salta a esta línea, en otros casos se requeriría un else
-        return "Operación exitosa, nuevo saldo: " + saldo;
+        if (verificarMeta()) {
+            meta = 0;
+            System.out.println("Ha superado la meta!");
+        }
+        return "Operación exitosa, el nuevo saldo es: " + saldo;
     }
 
+    // Definir meta de ahorro
+    public String definirMeta(int valor){
+        if (tieneLimite && LIMITE_BILLETERA < valor){
+            return "Error, la meta supera el límite";
+        }
+        if (valor <= 0) {
+            return "El valor ingresado no es válido";
+        }
+        if (valor <= saldo) {
+            return "Ya ha superado este valor";       
+        }
+        meta = valor;
+        return "Nueva meta agregada!";
+    }
+    
     // Sacar dinero de la billetera
 
         public String extSaldo(int valor){ // retirar y si el saldo es menor a lo que se se quiere retirar no se puede retirar
@@ -56,14 +85,20 @@ public class Wallet { //vamos a manejar esta clase como una alcancía o cuenta d
         } 
 
     // Romper el límite le cuestra 10.000 (cambiar limite de true a false)
-        public String breakLimite(boolean limite){
+        public String breakLimite(){
+            if (!tieneLimite){
+                return "Error. Su cuenta no tiene límite.";
+            }
             if (saldo >= 10000){
-                tieneLimite = limite;
+                tieneLimite = true;
                 saldo -= 10000;
                 return "Cambio exitoso. Nuevo saldo: " + saldo;
             }
             return "El cambio no es posible, saldo insuficiente";
         }
+    
+        
+
 
 // https://github.com/marcof90/grupo88c2
 // https://github.com/marcof90/grupo88c2.git
