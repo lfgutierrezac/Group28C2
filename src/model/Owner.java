@@ -5,7 +5,7 @@ public class Owner extends Usuario{ // Con extend se especifica que Owner hereda
 
     public Owner(String nNombre) {
         super();
-        wallet = new Wallet(true, true);
+        wallet = new Wallet(true);
         setNombre(nNombre);
     }
 

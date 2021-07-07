@@ -1,20 +1,24 @@
-package model; 
+package model;
+
 
 public class Wallet { 
     public static final int LIMITE_BILLETERA = 500000; // límite establecido para la billetera
     public static final int TOPE_TRANSACCION = 200000; // tope máximo para consignaciones y retiros
-
+    public static final double TAZA_TRANSFERENCIA = 0.002; // taza aplicada a la transferencias
+        
     private int saldo; 
     private boolean tieneLimite; // servirá para saber si mi billetera tiene un límite
     private double meta; // servirá para definir una meta de ahorro
     private boolean topeTransaccion; 
 
     // Contructor
-    public Wallet(boolean limite, boolean tope) { 
+    public Wallet(boolean limite) { 
         saldo = 0; // recien creada la billetera el saldo sera "cero"
         tieneLimite = limite; // al crear el objeto de la calse Wallet se definirá si la billetera tendrá límite
         meta = 0; // recien creada la billetera la meta sera "cero"
-        topeTransaccion = tope;
+        if (tieneLimite) {
+            topeTransaccion = true; // si la billetera tiene límite, entonces también tendrá tope
+        }
     }
 
     // Leer el saldo 
@@ -53,9 +57,9 @@ public class Wallet {
         if (saldo + valor > LIMITE_BILLETERA && tieneLimite) { // Evaluamos si la suma del saldo y el nuevo valor supera el límite y si existe un limite de saldo
             return "No puede superar el límite: " + LIMITE_BILLETERA;
         }
-        saldo += valor; // Si no se cumple la condición anterior se agrega el valor consignado al saldo
+        saldo += valor; // Si no se cumplen las condiciones anteriores se agrega el valor consignado al saldo
         if (verificarMeta()) { // se evalúa si se ha cumplido la meta de ahorro
-            meta = 0; // se establece la meta nuevamente en "cero"
+            meta = 0; // Si se ha cumplido la meta se reestablece en "cero"
             System.out.println("Ha superado la meta!");
         }
         return "Operación exitosa, el nuevo saldo es: " + saldo;
@@ -67,13 +71,16 @@ public class Wallet {
             return "No puede superar el valor máximo de transacción: " + TOPE_TRANSACCION;
         }
         if (saldo - valor < 0){
-            return "Saldo insuficiente, monto máximo: " + saldo;
+            return "Saldo insuficiente";
         }
         saldo -= valor;
         return "Operación exitosa, nuevo saldo: " + saldo;
     }
 
     public String extSaldo(int valor){ // retirar. Si el saldo es menor a lo que se se quiere entonces retirar el saldo disponible
+        if (valor > TOPE_TRANSACCION && tieneLimite && topeTransaccion){
+            return "No puede superar el valor máximo de transacción: " + TOPE_TRANSACCION;
+        }
         if (valor > saldo){
             int saldoAnterior = saldo; // variable temporal para almacenar el saldo disponible que puede retirarse
             saldo = 0;
@@ -89,11 +96,11 @@ public class Wallet {
             return "No puede superar el valor máximo de transacción: " + TOPE_TRANSACCION;  
         }
         if (saldo - valor < 0){
-            return "Saldo insuficiente, monto máximo: " + saldo;
+            return "Saldo insuficiente";
         }
         wallet.saldo += valor;
-        saldo -= valor;
-        return "Operación exitosa";   
+        saldo -= valor * (1+TAZA_TRANSFERENCIA);
+        return "Operación exitosa, nuevo saldo: " + saldo;   
     }
 
     // Romper el límite le cuestra 10.000 (cambiar limite de true a false)

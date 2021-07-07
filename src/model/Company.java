@@ -5,7 +5,7 @@ public class Company extends Usuario{ // Con extend se especifica que Company he
 
     public Company(String nNombre) {
         super();
-        wallet = new Wallet(false, false);
+        wallet = new Wallet(false);
         setNombre(nNombre);
     }
 
